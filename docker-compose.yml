@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    image: python:3.9-slim
+    container_name: smart_ecommerce_app
+    working_dir: /usr/src/app
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/smart_ecommerce_db
+    command: >
+      sh -c "pip install -r requirements.txt &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  db:
+    image: postgres:14
+    container_name: smart_ecommerce_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: smart_ecommerce_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  frontend:
+    image: node:16
+    container_name: smart_ecommerce_frontend
+    working_dir: /usr/src/frontend
+    volumes:
+      - ./frontend:/usr/src/frontend
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npm install &&
+             npm start"
+
+volumes:
+  db_data:
