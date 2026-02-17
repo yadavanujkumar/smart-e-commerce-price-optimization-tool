@@ -5,7 +5,10 @@ from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import warnings
+import logging
+
 warnings.filterwarnings('ignore')
+logger = logging.getLogger(__name__)
 
 try:
     import xgboost as xgb
@@ -229,8 +232,9 @@ class PriceOptimizer:
             try:
                 self.demand_model.fit(X, y)
                 predicted_demand = self.demand_model.predict([[price]])[0]
-            except Exception:
+            except Exception as e:
                 # Fallback to linear regression
+                logger.warning(f"ML model prediction failed for product {product_id} at price {price}, falling back to linear regression. Error: {e}")
                 coef = np.polyfit(product_demand['price'], product_demand['quantity'], 1)
                 predicted_demand = coef[0] * price + coef[1]
         else:
@@ -284,7 +288,8 @@ class PriceOptimizer:
                     best_revenue = revenue
                     best_price = current_price
                     best_demand = demand
-            except Exception:
+            except Exception as e:
+                logger.debug(f"Failed to calculate revenue for product {product_id} at price {current_price:.2f}: {e}")
                 pass
             
             current_price += step

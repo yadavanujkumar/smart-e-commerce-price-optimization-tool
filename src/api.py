@@ -40,10 +40,13 @@ def load_optimizer_data():
         products = repository.get_product_data()
     
     # Create sample demand data
+    price_multipliers = [0.8, 1.0, 1.2]
+    quantity_multipliers = [1.5, 1.0, 0.7]
+    
     demand_data = pd.DataFrame({
-        'product_id': [p['id'] for p in products for _ in range(3)],
-        'price': [p['price'] * 0.8, p['price'], p['price'] * 1.2 for p in products],
-        'quantity': [int(p['stock'] * 1.5), p['stock'], int(p['stock'] * 0.7) for p in products]
+        'product_id': [p['id'] for p in products for _ in range(len(price_multipliers))],
+        'price': [p['price'] * m for p in products for m in price_multipliers],
+        'quantity': [int(p['stock'] * m) for p in products for m in quantity_multipliers]
     })
     
     inventory_data = pd.DataFrame({
@@ -64,9 +67,10 @@ def load_optimizer_data():
     if competitor_data_list:
         competitor_data = pd.DataFrame(competitor_data_list)
     else:
+        competitor_multipliers = [0.95, 1.05]
         competitor_data = pd.DataFrame({
-            'product_id': [p['id'] for p in products for _ in range(2)],
-            'price': [p['price'] * 0.95, p['price'] * 1.05 for p in products]
+            'product_id': [p['id'] for p in products for _ in range(len(competitor_multipliers))],
+            'price': [p['price'] * m for p in products for m in competitor_multipliers]
         })
     
     return PriceOptimizer(demand_data, inventory_data, competitor_data), products

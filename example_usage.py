@@ -32,6 +32,11 @@ from src.utils.visualizations import (
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# Constants for data generation
+DEMAND_PRICE_MULTIPLIERS = [0.7, 0.85, 1.0, 1.15, 1.3]
+DEMAND_QUANTITY_MULTIPLIERS = [2.0, 1.5, 1.0, 0.7, 0.5]
+COMPETITOR_PRICE_MULTIPLIERS = [0.9, 1.0, 1.1]
+
 
 def main():
     """Main demonstration function."""
@@ -60,9 +65,9 @@ def main():
     
     # Prepare data for optimizer
     demand_data = pd.DataFrame({
-        'product_id': [p['id'] for p in products for _ in range(5)],
-        'price': [p['price'] * m for p in products for m in [0.7, 0.85, 1.0, 1.15, 1.3]],
-        'quantity': [int(p['stock'] * m) for p in products for m in [2.0, 1.5, 1.0, 0.7, 0.5]]
+        'product_id': [p['id'] for p in products for _ in range(len(DEMAND_PRICE_MULTIPLIERS))],
+        'price': [p['price'] * m for p in products for m in DEMAND_PRICE_MULTIPLIERS],
+        'quantity': [int(p['stock'] * m) for p in products for m in DEMAND_QUANTITY_MULTIPLIERS]
     })
     
     inventory_data = pd.DataFrame({
@@ -81,8 +86,8 @@ def main():
             })
     
     competitor_data = pd.DataFrame(competitor_data_list) if competitor_data_list else pd.DataFrame({
-        'product_id': [p['id'] for p in products for _ in range(3)],
-        'price': [p['price'] * m for p in products for m in [0.9, 1.0, 1.1]]
+        'product_id': [p['id'] for p in products for _ in range(len(COMPETITOR_PRICE_MULTIPLIERS))],
+        'price': [p['price'] * m for p in products for m in COMPETITOR_PRICE_MULTIPLIERS]
     })
     
     print("\n" + "=" * 80)
