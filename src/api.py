@@ -6,6 +6,7 @@ Provides REST endpoints for price optimization, analysis, and predictions.
 from flask import Flask, request, jsonify
 import pandas as pd
 import logging
+import os
 from pathlib import Path
 import sys
 
@@ -346,4 +347,7 @@ if __name__ == '__main__':
         repository.add_mock_data()
     
     logger.info("Starting Flask API server...")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Never run with debug=True in production - security risk!
+    # Debug mode allows arbitrary code execution through the debugger
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
