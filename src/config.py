@@ -26,6 +26,7 @@ class Config:
         """
         self._config.update({
             "APP_NAME": "Smart E-Commerce Price Optimization Tool",
+            "VERSION": "2.0",
             "DEBUG": False,
             "LOG_LEVEL": "INFO",
             "DATABASE_URL": "sqlite:///data/db.sqlite3",
@@ -33,8 +34,50 @@ class Config:
             "API_RATE_LIMIT": 1000,  # requests per minute
             "SUPPORTED_CURRENCIES": ["USD", "EUR", "GBP", "JPY"],
             "DEFAULT_CURRENCY": "USD",
-            "PRICE_OPTIMIZATION_ALGORITHM": "linear_regression",
             "MAX_PRODUCTS": 100000,  # maximum number of products supported
+            
+            # Machine Learning Configuration
+            "PRICE_OPTIMIZATION_ALGORITHM": "gradient_boosting",
+            "ML_MODEL_OPTIONS": ["linear", "ridge", "random_forest", "gradient_boosting", "xgboost", "lightgbm"],
+            "DEFAULT_ML_MODEL": "gradient_boosting",
+            "ML_N_ESTIMATORS": 100,
+            "ML_MAX_DEPTH": 5,
+            "ML_RANDOM_STATE": 42,
+            
+            # Price Optimization Parameters
+            "MIN_PROFIT_MARGIN": 0.20,  # 20% minimum margin
+            "MAX_PRICE_CHANGE": 0.30,  # Maximum 30% price change
+            "ENABLE_PSYCHOLOGICAL_PRICING": True,
+            "PSYCHOLOGICAL_PRICE_ENDINGS": [0.99, 0.95, 0.89],
+            
+            # Inventory Thresholds
+            "VERY_LOW_INVENTORY_THRESHOLD": 10,
+            "LOW_INVENTORY_THRESHOLD": 30,
+            "HIGH_INVENTORY_THRESHOLD": 100,
+            "VERY_HIGH_INVENTORY_THRESHOLD": 200,
+            
+            # Pricing Adjustments
+            "VERY_LOW_INVENTORY_MULTIPLIER": 1.25,
+            "LOW_INVENTORY_MULTIPLIER": 1.10,
+            "HIGH_INVENTORY_MULTIPLIER": 0.90,
+            "VERY_HIGH_INVENTORY_MULTIPLIER": 0.75,
+            
+            # Revenue Optimization
+            "REVENUE_SEARCH_STEP": 1.0,  # Price increment for revenue search
+            "REVENUE_PRICE_RANGE_MIN": 0.7,  # 70% of competitor average
+            "REVENUE_PRICE_RANGE_MAX": 1.3,  # 130% of competitor average
+            
+            # API Configuration
+            "API_HOST": "0.0.0.0",
+            "API_PORT": 5000,
+            "API_DEBUG": False,
+            "ENABLE_CORS": True,
+            
+            # Feature Flags
+            "ENABLE_ML_MODELS": True,
+            "ENABLE_ELASTICITY_CALCULATION": True,
+            "ENABLE_COMPETITOR_ANALYSIS": True,
+            "ENABLE_VISUALIZATION": True,
         })
 
     def _load_environment_variables(self):

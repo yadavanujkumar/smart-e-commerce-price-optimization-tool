@@ -46,8 +46,8 @@ def main():
     # Create sample data for price optimizer
     demand_data = pd.DataFrame({
         'product_id': [p['id'] for p in products for _ in range(3)],
-        'price': [p['price'] * 0.8, p['price'], p['price'] * 1.2 for p in products],
-        'quantity': [int(p['stock'] * 1.5), p['stock'], int(p['stock'] * 0.7) for p in products]
+        'price': [p['price'] * m for p in products for m in [0.8, 1.0, 1.2]],
+        'quantity': [int(p['stock'] * m) for p in products for m in [1.5, 1.0, 0.7]]
     })
     
     inventory_data = pd.DataFrame({
@@ -71,7 +71,7 @@ def main():
         # Create mock competitor data
         competitor_data = pd.DataFrame({
             'product_id': [p['id'] for p in products for _ in range(2)],
-            'price': [p['price'] * 0.95, p['price'] * 1.05 for p in products]
+            'price': [p['price'] * m for p in products for m in [0.95, 1.05]]
         })
     
     # Initialize price optimizer
