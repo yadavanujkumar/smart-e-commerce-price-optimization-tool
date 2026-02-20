@@ -76,3 +76,5 @@ docs/_build/
 # Miscellaneous
 *.bak
 *.orig
+data/*.db
+*.html
